@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shiny)\nlibrary(plotly)\n\nshinyUI(bootstrapPage(theme = \"bootstrap.css\", \n\n  navbarPage(\"RaceChrono Analyzer\", collapsible = TRUE,\n     tabPanel(\"Home\", icon = icon(\"home\")\n     \n     ),\n     tabPanel(\"Data\", icon = icon(\"file-text\"),\n              fileInput(\"file\", h3(\"Upload RaceChrono2AVI.csv format\"), accept=c(\"text/csv\", \"text/comma-separated-values,text/plain\", \".csv\")),\n              tags$hr(),\n              uiOutput(\"choose_columns\"),\n              DT::dataTableOutput('createTable')\n     ),\n     tabPanel(\"One variable graph\", icon = icon(\"signal\"),\n              uiOutput('var_single'),\n              actionButton('generateGraph', 'Generate'),\n              tags$br(),\n              tags$br(),\n              plotlyOutput('single_var_graph')\n     ),\n     tabPanel(\"Two variable graph\", icon = icon(\"bar-chart\"),\n              uiOutput('var_x'),\n              uiOutput('var_y'),\n              actionButton('generateGraph', 'Generate'),\n              tags$br(),\n              tags$br(),\n              plotlyOutput('two_var_graph')\n     ),\n     tabPanel(\"Map\", icon = icon(\"map-marker\"),\n              plotOutput(\"map\")\n     )\n  )\n))\n",
+    "created" : 1484596011924.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2304720671",
+    "id" : "F3D98351",
+    "lastKnownWriteTime" : 1488657450,
+    "last_content_update" : 1488657450896,
+    "path" : "C:/Users/I850366/Desktop/R_app/RDA_APP/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
