@@ -65,7 +65,7 @@ shinyServer(function(input, output) {
   
   output$single_var_graph <- renderPlotly({
     input$generateGraph
-      plot_ly(readFile(), x=readFile()$Lap.., y=readFile()$Speed..kph., type = 'scatter', mode = 'lines', color = I("blue")) %>% 
+      plot_ly(readFile(), x=readFile()$Distance..m., y=readFile()$Speed..kph., type = 'scatter', mode = 'lines', color = I("blue")) %>% 
         layout(title="Race Data", xaxis = list(title="Date"), yaxis = list(title="Speed km/h"))
   })
   
@@ -88,4 +88,5 @@ shinyServer(function(input, output) {
   output$createTable1 <- DT::renderDataTable({
     DT::datatable(long_lat_df(), filter='top')
   })
+
 })
