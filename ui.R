@@ -15,6 +15,7 @@ shinyUI(bootstrapPage(theme = "bootstrap.css",
                 ),
                 column(8,uiOutput("choose_columns"))
               ),
+              verbatimTextOutput("fastest_speed"),
               DT::dataTableOutput('createTable'),
               DT::dataTableOutput('createTable1')
      ),

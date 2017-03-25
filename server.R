@@ -49,6 +49,10 @@ shinyServer(function(input, output) {
     DT::datatable(data_table(), filter='top')
   })
   
+  output$fastest_speed <- renderPrint({
+    max(readFile()$Speed..kph)
+  })
+  
   output$var_single <- renderUI({
     selectInput('select_var_single', 'Variable to graph',
                 sort(colnames(readFile())) )
