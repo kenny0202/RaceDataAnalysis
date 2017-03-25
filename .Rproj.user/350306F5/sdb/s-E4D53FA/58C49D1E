@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shiny)\nlibrary(plotly)\nlibrary(DT)\nlibrary(ggmap)\n\nshinyServer(function(input, output) {\n\n  readFile <- reactive({\n    infile <- input$file\n    if (is.null(infile)){\n      return(NULL)      \n    }\n    #read csv file skipping the first 9 lines\n    csv_to_Table <- read.csv(infile$datapath, header=TRUE, sep=\",\", skip=9)\n    \n    #filter using grep to remove \"N/A\" from Lap # column\n    csv_to_Table <- csv_to_Table[!grepl(\"N/A\", csv_to_Table$Lap..),]\n    \n    #remove unecessary columns\n    csv_to_Table <- csv_to_Table[,!grepl(\"^Time\", names(csv_to_Table)) &\n                                  !grepl(\"^Distance..km\", names(csv_to_Table)) &\n                                  !grepl(\"^Locked\", names(csv_to_Table)) & \n                                  !grepl(\"^Trap\", names(csv_to_Table)) & \n                                  !grepl(\"^Speed..m.s.\", names(csv_to_Table)) &\n                                  !grepl(\"^Altitude\", names(csv_to_Table))\n                                ]\n    \n  })\n  \n  output$choose_columns <- renderUI({\n    cn <- colnames(readFile())\n    checkboxGroupInput(\"columns\", \"\", \n                        choices  = cn,\n                        selected = cn)\n  })\n  \n  data_table <- reactive({\n    # If missing input, return to avoid error later in function\n    if(is.null(input$file))\n      return(NULL)\n    \n    # Get the data set\n    dat <- readFile()\n    \n    # Keep the selected columns\n    dat[, input$columns, drop = FALSE]\n  })\n  \n  output$createTable <- DT::renderDataTable({\n    DT::datatable(data_table(), filter='top')\n  })\n  \n  output$var_single <- renderUI({\n    selectInput('select_var_single', 'Variable to graph',\n                sort(colnames(readFile())) )\n  })\n  \n  output$var_x <- renderUI({\n    selectInput('select_var_x', 'Variable to display on X axis',\n                sort(colnames(readFile())) )\n  })\n  output$var_y <- renderUI({\n    selectInput('select_var_y', 'Variable to display on Y axis',\n                sort(colnames(readFile())) )\n  })\n  \n  output$single_var_graph <- renderPlotly({\n    input$generateGraph\n      plot_ly(readFile(), x=readFile()$Distance..m., y=readFile()$Speed..kph., type = 'scatter', mode = 'lines', color = I(\"blue\")) %>% \n        layout(title=\"Race Data\", xaxis = list(title=\"Date\"), yaxis = list(title=\"Speed km/h\"))\n  })\n  \n  output$two_var_graph <- renderPlotly({\n    input$generateGraph\n  })\n  \n  output$map <- renderPlot({\n    loc <- c(lon = -122.3268492 , lat = 49.1265247)\n    test <- get_map(loc, zoom = 16, maptype = 'satellite')\n    ggmap(test)\n    \n  }, width = 1800, height = 900)\n\n})\n",
+    "created" : 1484596012961.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3036907221",
+    "id" : "58C49D1E",
+    "lastKnownWriteTime" : 1488659255,
+    "last_content_update" : 1488659255520,
+    "path" : "C:/Users/I850366/Desktop/R_app/RDA_APP/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
