@@ -15,6 +15,21 @@ shinyServer(function(input, output) {
     
     #filter using grep to remove "N/A" from Lap # column
     csv_to_Table <- csv_to_Table[!grepl("N/A", csv_to_Table$Lap..),]
+  
+    #create new dataframe to contain only lap # and timestamp.
+    #time_df will be used to calculate lap time.
+    time_df <- csv_to_Table[c("Lap..", "Timestamp..s." )]
+    #log information to csv for now
+    write.csv(time_df, file = "data/lap_timestamp.csv")
+    
+    output$time_test <- renderText({
+      #drive time in seconds
+      time_seconds <- max(time_df$Timestamp..s.) - min(time_df$Timestamp..s.)
+      
+      
+      
+      
+    })
     
     #remove unecessary columns
     csv_to_Table <- csv_to_Table[,!grepl("^Time", names(csv_to_Table)) &
@@ -43,6 +58,14 @@ shinyServer(function(input, output) {
     
     # Keep the selected columns
     dat[, input$columns, drop = FALSE]
+  })
+  
+  output$max_speed <- renderText({
+    "Max Speed"
+  })
+  
+  output$lap_time <- renderText({
+    "Fastest Lap Time"
   })
   
   output$createTable <- DT::renderDataTable({
