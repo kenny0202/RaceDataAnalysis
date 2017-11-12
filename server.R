@@ -10,6 +10,8 @@ shinyServer(function(input, output) {
     if (is.null(infile)){
       return(NULL)      
     }
+    
+  
     #read csv file skipping the first 9 lines
     csv_to_Table <- read.csv(infile$datapath, header=TRUE, sep=",", skip=9)
     
@@ -23,6 +25,18 @@ shinyServer(function(input, output) {
                                   !grepl("^Trap", names(csv_to_Table)) & 
                                   !grepl("^Speed..m.s.", names(csv_to_Table))
                                 ]
+    
+  })
+  
+  readFile2 <- reactive({
+    infile2 <- input$file
+    if (is.null(infile2)){
+      return (NULL)
+    }
+    
+    #read track name
+    #skip first 4 line and read max of 1 row 
+    track_name <- read.csv(infile2$datapath, header = F, skip = 4, nrows = 1, as.is = F)
     
   })
   
@@ -49,6 +63,13 @@ shinyServer(function(input, output) {
     DT::datatable(data_table(), filter='top')
   })
   
+  output$track_name <- renderPrint({
+    print(df <- as.character(readFile2()[[2]]), quote=FALSE)
+  })
+  
+  output$TopSpeed <- renderPrint({
+    print("Top Speed")
+  })
   output$fastest_speed <- renderPrint({
     max(readFile()$Speed..kph)
   })
