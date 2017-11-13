@@ -86,14 +86,21 @@ shinyServer(function(input, output) {
     DT::datatable(data_table(), filter='top')
   })
   
-  output$track_name <- renderPrint({
+  output$track_name <- renderUI({
     print(df <- as.character(readFile2()[[2]]), quote=FALSE)
   })
   
-  output$TopSpeed <- renderPrint({
+  output$top_speed_text <- renderUI({
+    df <- readFile()
+    if (is.null(df)) 
+      return(NULL)
     print("Top Speed")
   })
-  output$fastest_speed <- renderPrint({
+  
+  output$top_speed <- renderPrint({
+    df <- readFile()
+    if (is.null(df)) 
+      return(NULL)
     max(readFile()$Speed..kph)
   })
   
